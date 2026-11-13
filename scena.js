@@ -6,7 +6,7 @@
   var SREDINA = 160;     // sredina prvog odjela; vidi se 320 jedinica odjednom
   var POD = 168;         // gornji rub trake
   var ARAK_Y = POD - 54; // arak je 76 x 54
-  var NAZIVI = ["Tehnolozi", "Priprema", "Tisak", "Dorada", "Skladište"];
+  var NAZIVI = ["Papir", "Priprema", "Tisak", "Dorada", "Skladište"];
   var KUTOVI = [-8, 5, 10, -5, 7, -10];   // koliko se koja etiketa zakrene kod lošeg reza
 
   var svijet, arak, korijen;
@@ -29,16 +29,17 @@
 
   // Stražnji dio odjela: ono iza trake i arka.
   var IZA = [
-    // Tehnolozi: monitor s proračunom i lepeza uzoraka papira
+    // Papir: na zidu vlagomjer i termometar, jer papir živi od klime
     function () {
-      return '<rect class="s-ploha" x="-22" y="58" width="44" height="30" rx="2"/>' +
-        '<rect class="s-redak" x="-16" y="65" width="24" height="2.6"/>' +
-        '<rect class="s-redak" x="-16" y="71.5" width="31" height="2.6"/>' +
-        '<rect class="s-redak" x="-16" y="78" width="17" height="2.6"/>' +
-        '<line class="s-crta" x1="0" y1="88" x2="0" y2="99"/>' +
-        '<g transform="translate(-46 97)"><rect class="s-ploha" x="-7" y="-13" width="11" height="15" transform="rotate(-24)"/>' +
-        '<rect class="s-uzorak" x="-5" y="-14" width="11" height="15" transform="rotate(-6)"/>' +
-        '<rect class="s-ploha" x="-2" y="-14" width="11" height="15" transform="rotate(13)"/></g>';
+      var crtice = "";
+      for (var k = -3; k <= 3; k++)
+        crtice += '<line class="s-tanko" x1="0" y1="-9.5" x2="0" y2="-7.5" transform="rotate(' + (k * 32) + ')"/>';
+      return '<g transform="translate(-30 72)"><circle class="s-ploha" r="12"/>' + crtice +
+        '<g class="s-kazaljka"><rect class="s-tamno" x="-0.7" y="-8.5" width="1.4" height="8.5"/></g>' +
+        '<circle class="s-tamno" r="1.8"/></g>' +
+        '<g transform="translate(8 60)"><rect class="s-ploha" x="0" y="0" width="6" height="22" rx="3"/>' +
+        '<rect class="s-ziva" x="2" y="9" width="2" height="13"/><circle class="s-ploha" cx="3" cy="25" r="4.6"/>' +
+        '<circle class="s-ziva" cx="3" cy="25" r="2.6"/></g>';
     },
     // Priprema: monitor s montažom 3 x 2
     function () {
@@ -71,13 +72,19 @@
 
   // Prednji dio odjela: kućište iza kojeg arak nestane dok se obrađuje.
   var ISPRED = [
+    // Papir: paleta araka u omotu, s naljepnicom na kojoj je smjer vlakanaca
     function () {
-      return '<rect class="s-tijelo" x="-58" y="100" width="116" height="68"/>' +
-        '<rect class="s-tamno" x="-63" y="97" width="126" height="5" rx="1"/>' +
-        '<rect class="s-ploha" x="-20" y="116" width="40" height="30" rx="1"/>' +
-        '<rect class="s-tamno2" x="-8" y="113" width="16" height="5" rx="1"/>' +
-        '<line class="s-tanko" x1="-14" y1="126" x2="14" y2="126"/><line class="s-tanko" x1="-14" y1="132" x2="14" y2="132"/>' +
-        '<line class="s-tanko" x1="-14" y1="138" x2="4" y2="138"/>' + lampa(46, 112);
+      var arci = "";
+      for (var y = 104; y <= 152; y += 6) arci += '<line class="s-tanko" x1="-56" y1="' + y + '" x2="56" y2="' + y + '"/>';
+      return '<rect class="s-ploha" x="-52" y="94" width="100" height="5"/>' +
+        '<rect class="s-ploha" x="-56" y="98" width="112" height="60"/>' + arci +
+        '<rect class="s-omot" x="-56" y="98" width="34" height="60"/>' +
+        '<rect class="s-ploha" x="-10" y="112" width="38" height="28" rx="1"/>' +
+        '<path class="s-crta" d="M-3 122 h24 M-3 122 l4 -3 M-3 122 l4 3 M21 122 l-4 -3 M21 122 l-4 3"/>' +
+        '<line class="s-tanko" x1="-3" y1="131" x2="21" y2="131"/><line class="s-tanko" x1="-3" y1="135" x2="12" y2="135"/>' +
+        '<rect class="a-drvo" x="-62" y="158" width="124" height="10"/>' +
+        '<rect class="s-tamno2" x="-42" y="162" width="28" height="4"/><rect class="s-tamno2" x="14" y="162" width="28" height="4"/>' +
+        lampa(42, 106);
     },
     function () {
       return '<polygon class="s-tijelo3" points="-58,96 -42,85 58,85 58,96"/>' +
@@ -143,7 +150,10 @@
   function arakSvg() {
     var strip = "", boje = ["k", "c", "m", "y", "s"];
     for (var i = 0; i < 5; i++) strip += '<rect class="sep-' + boje[i] + '" x="' + (25 + i * 5.4) + '" y="49.6" width="4.4" height="2.6"/>';
-    return '<g class="a-list"><rect class="a-papir" width="76" height="54" rx="0.6"/>' +
+    // valovit arak: gornji i donji rub u valovima (papir koji nije aklimatiziran)
+    var val = "M0 2 q9.5 -5 19 0 t19 0 t19 0 t19 0 L76 52 q-9.5 5 -19 0 t-19 0 t-19 0 t-19 0 Z";
+    return '<g class="a-list"><rect class="a-papir a-ravan" width="76" height="54" rx="0.6"/>' +
+      '<path class="a-papir a-valovit" d="' + val + '"/>' +
       '<g class="a-oznake">' + paser(3.2, 27) + paser(72.8, 27) + '<g class="a-strip">' + strip + "</g></g></g>" +
       '<g class="a-nalog"><rect class="a-nalog-list" x="6" y="-9" width="22" height="12" rx="1"/>' +
       '<line class="a-nalog-red" x1="9.5" y1="-5.4" x2="24" y2="-5.4"/><line class="a-nalog-red" x1="9.5" y1="-2" x2="19" y2="-2"/>' +

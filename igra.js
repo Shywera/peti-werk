@@ -2,15 +2,15 @@
 (function () {
   "use strict";
 
-  var ODJELI = ["Tehnolozi", "Priprema", "Tisak", "Dorada", "Skladište"];
+  var ODJELI = ["Papir", "Priprema", "Tisak", "Dorada", "Skladište"];
   var TOCNO = 60, BLIZU = 30, BRZINA = 40, POCEK = 5;
   var ROK = { izbor: 30, broj: 35, redoslijed: 45 };
   var DAN_NULA = Date.UTC(2026, 10, 1);
   var SLOVA = ["A", "B", "C", "D"];
-  var RIJEC = { tocno: "Točno", blizu: "Blizu", krivo: "Krivo", vrijeme: "Vrijeme je isteklo" };
+  var RIJEC = { tocno: "Točno", blizu: "Blizu", krivo: "Krivo", vrijeme: "Prekasno" };
   // Što se s arkom dogodilo u odjelu: [dobro, loše]
   var POGON = [
-    ["Nalog je raspisan kako treba.", "Nalog je otišao s greškom."],
+    ["Papir je ravan i ide na stroj.", "Papir se zavalovio."],
     ["Montaža sjedi, ploče su dobre.", "Montaža je otišla ukrivo."],
     ["Otisak je u paseru.", "Otisak nije u paseru."],
     ["Rez je čist.", "Rez je pobjegao."],
@@ -227,7 +227,7 @@
     crtajStrip();
     prikazi(
       el("h1", { class: "naslov", text: "Provedi arak kroz tiskaru" }),
-      el("p", { class: "uvod", text: "Pet odjela, pet pitanja, svaki dan novi nalog. Točan i brz odgovor nosi najviše bodova." }),
+      el("p", { class: "uvod", text: "Pet odjela, pet pitanja, svaki dan novi radni nalog. Točan i brz odgovor nosi najviše bodova." }),
       obrazacImena("Tvoje ime", "Kreni", pocetna));
   }
 
@@ -258,9 +258,9 @@
     prikazi(
       el("h1", { class: "naslov", text: "Bok, " + ime() }),
       el("p", { class: "uvod", text: uTijeku
-        ? "Nalog za " + lijepDatum(danas()) + " stoji na pola puta. Sat za pitanje koje si vidio i dalje teče."
-        : "Nalog za " + lijepDatum(danas()) + " čeka: pet pitanja, oko tri minute. Na svako pitanje imaš jedan pokušaj." }),
-      el("button", { class: "gumb glavni siri", type: "button", text: uTijeku ? "Nastavi nalog" : "Igraj današnji nalog",
+        ? "Radni nalog za " + lijepDatum(danas()) + " je otvoren i stoji na pola puta. Sat za pitanje koje si vidio i dalje teče."
+        : "Radni nalog za " + lijepDatum(danas()) + " čeka: pet pitanja, oko tri minute. Na svako pitanje imaš jedan pokušaj." }),
+      el("button", { class: "gumb glavni siri", type: "button", text: uTijeku ? "Nastavi radni nalog" : "Otvori današnji radni nalog",
         onclick: function () { zapocni("dan"); } }),
       n > 0 ? el("p", { class: "sitno", text: "Niz: " + n + (n === 1 ? " dan" : " dana") + " zaredom." }) : null,
       el("button", { class: "veza", type: "button", text: "Promijeni ime", onclick: ekranPromjenaImena }));
@@ -507,7 +507,7 @@
         el("button", { class: "gumb" + (vjezba ? " glavni" : ""), type: "button", text: vjezba ? "Još vježbe" : "Vježba",
           onclick: function () { zapocni("vjezba"); } }),
         vjezba ? el("button", { class: "gumb", type: "button", text: "Na početnu", onclick: pocetna }) : null),
-      vjezba ? null : el("p", { class: "sitno", text: "Novi nalog stiže u ponoć. Do tada možeš vježbati, vježba se ne boduje." }));
+      vjezba ? null : el("p", { class: "sitno", text: "Novi radni nalog stiže u ponoć. Do tada možeš vježbati, vježba se ne boduje." }));
     window.scrollTo(0, 0);
     if (!vjezba) upisiNaLjestvicu(p, mjesto);
   }
@@ -577,7 +577,7 @@
         pov.length ? el("ol", { class: "lista datumi" }, pov.map(function (x) {
           return el("li", null, el("span", { class: "mjesto", text: x.d.slice(8) + "." + x.d.slice(5, 7) + "." }),
             el("span", { class: "ime", text: "Nalog" }), mini(x.w), el("span", { class: "bodovi", text: String(x.b) }));
-        })) : el("p", { class: "prazno", text: "Još nemaš odrađen nalog." }),
+        })) : el("p", { class: "prazno", text: "Još nemaš odrađen radni nalog." }),
         natrag);
       return;
     }
