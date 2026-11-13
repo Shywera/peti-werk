@@ -217,7 +217,7 @@
       spremi("ime", v);
       nakon();
     } }, el("label", { for: "ime", text: naslov }), unos,
-      el("p", { class: "sitno", text: "Pod tim imenom si na ljestvici." }), greska,
+      el("p", { class: "sitno", text: spojena() ? "Pod tim imenom si na ljestvici." : "Ime ide uz tvoj rezultat." }), greska,
       el("button", { class: "gumb glavni siri", type: "submit", text: gumb }));
   }
 
@@ -490,7 +490,7 @@
       el("div", { class: "rezultat-broj" }, el("b", { text: String(ukupno(p)) }),
         el("span", { text: "od 500 bodova" + (vjezba ? " · vježba" : "") })),
       el("p", { class: "kartica " + kartica[0] }, el("i"), el("span", { text: kartica[1] })),
-      vjezba ? el("p", { class: "sitno", text: "Vježba se ne upisuje na ljestvicu." }) : mjesto,
+      vjezba ? el("p", { class: "sitno", text: "Vježba se ne boduje i ne ulazi u tvoje rezultate." }) : (spojena() ? mjesto : null),
       !vjezba && n > 1 ? el("p", { class: "sitno", text: "Niz: " + n + " dana zaredom." }) : null,
       el("div", { class: "pregled" }, p.odgovori.map(function (o, i) {
         var q = banka.sva[o.id], klasa = los(o.ishod) ? "krivo" : o.ishod, tvoj = tvojTekst(q, o.dao);
@@ -565,23 +565,25 @@
       return el("button", { type: "button", "aria-pressed": raspon === kljuc ? "true" : "false", text: naziv,
         onclick: function () { if (raspon !== kljuc) ekranLjestvica(kljuc); } });
     }
-    prikazi(el("h1", { class: "naslov", text: "Ljestvica" }),
-      el("div", { class: "kartice" }, kartica("dan", "Danas"), kartica("tjedan", "Ovaj tjedan")),
-      tijelo,
-      el("button", { class: "gumb siri", type: "button", text: "Natrag", onclick: function () {
-        gumbLjestvica.setAttribute("aria-pressed", "false");
-        (povratak || pocetna)();
-      } }));
+    var natrag = el("button", { class: "gumb siri", type: "button", text: "Natrag", onclick: function () {
+      gumbLjestvica.setAttribute("aria-pressed", "false");
+      (povratak || pocetna)();
+    } });
     if (!spojena()) {
-      var pov = povijest().slice(-7).reverse();
-      tijelo.replaceChildren(
-        el("p", { class: "prazno", text: "Zajednička ljestvica još nije spojena. Ovdje su tvoji zadnji nalozi na ovom uređaju." }),
-        el("ol", { class: "lista" }, pov.map(function (x) {
+      // Bez zajedničke ljestvice: zadnji nalozi s ovog uređaja.
+      var pov = povijest().slice(-14).reverse();
+      prikazi(el("h1", { class: "naslov", text: "Moji rezultati" }),
+        el("p", { class: "uvod", text: "Zajedničke ljestvice još nema. Podijeli rezultat u grupu pa usporedite." }),
+        pov.length ? el("ol", { class: "lista" }, pov.map(function (x) {
           return el("li", null, el("span", { class: "mjesto", text: x.d.slice(8) + "." + x.d.slice(5, 7) + "." }),
-            el("span", { class: "ime", text: ime() || "Ti" }), mini(x.w), el("span", { class: "bodovi", text: String(x.b) }));
-        })));
+            el("span", { class: "ime", text: "Nalog" }), mini(x.w), el("span", { class: "bodovi", text: String(x.b) }));
+        })) : el("p", { class: "prazno", text: "Još nemaš odrađen nalog." }),
+        natrag);
       return;
     }
+    prikazi(el("h1", { class: "naslov", text: "Ljestvica" }),
+      el("div", { class: "kartice" }, kartica("dan", "Danas"), kartica("tjedan", "Ovaj tjedan")),
+      tijelo, natrag);
     tijelo.replaceChildren(el("ol", { class: "lista kostur", "aria-label": "Učitavam" }, [0, 1, 2, 3, 4].map(function () { return el("li"); })));
     (raspon === "dan" ? ljestvicaDana(datum) : ljestvicaTjedna(datum)).then(function (redci) {
       if (!redci.length) {
@@ -619,6 +621,7 @@
 
   // ---------------------------------------------------------------- pokretanje
   document.getElementById("datum").textContent = lijepDatum(danas());
+  if (!spojena()) gumbLjestvica.textContent = "Rezultati";
   Scena.stvori(document.getElementById("scena"));
   pocetna();
 })();
