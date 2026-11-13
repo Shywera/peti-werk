@@ -27,14 +27,18 @@ Obična statična stranica, bez poslužitelja i bez alata za izgradnju.
 | `igra.js` | igra: dnevna pitanja, sat, bodovanje, rezultat, ljestvica |
 | `pitanja.js` | pitanja; slaže se alatom, ne uređuje se rukom |
 | `postavke.js` | adresa stranice i podaci za ljestvicu |
+| `fonts/` | fontovi (Big Shoulders Display, IBM Plex Sans i Mono) |
 | `ljestvica.sql` | tablica i pravila za zajedničku ljestvicu |
 
 Lokalno: `python -m http.server` u ovoj mapi pa otvori `http://localhost:8000`.
 
 ## Objava
 
-GitHub Pages: Settings > Pages > Deploy from a branch > `main`, mapa `/ (root)`. Stranica je tada na
-`https://<korisnik>.github.io/peti-werk/`. Istu adresu upiši u `postavke.js` (`adresa`), jer se ona dijeli uz rezultat.
+Igra je objavljena na `https://kai-sol.com/peti-werk/`, kao mapa `peti-werk/` u repozitoriju `shywera/web`.
+Ovaj repozitorij je izvor: nakon izmjene kopiraj datoteke stranice (`index.html`, `*.css`, `*.js`, `favicon.svg`,
+`fonts/`) u tu mapu. Ako se adresa promijeni, upiši je u `postavke.js` (`adresa`), jer se ona dijeli uz rezultat.
+
+Fontovi su u mapi `fonts/` i učitavaju se s iste stranice, a ne s Google Fonts.
 
 ## Zajednička ljestvica
 
