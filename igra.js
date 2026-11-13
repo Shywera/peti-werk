@@ -574,7 +574,7 @@
       var pov = povijest().slice(-14).reverse();
       prikazi(el("h1", { class: "naslov", text: "Moji rezultati" }),
         el("p", { class: "uvod", text: "Zajedničke ljestvice još nema. Podijeli rezultat u grupu pa usporedite." }),
-        pov.length ? el("ol", { class: "lista" }, pov.map(function (x) {
+        pov.length ? el("ol", { class: "lista datumi" }, pov.map(function (x) {
           return el("li", null, el("span", { class: "mjesto", text: x.d.slice(8) + "." + x.d.slice(5, 7) + "." }),
             el("span", { class: "ime", text: "Nalog" }), mini(x.w), el("span", { class: "bodovi", text: String(x.b) }));
         })) : el("p", { class: "prazno", text: "Još nemaš odrađen nalog." }),

@@ -329,6 +329,7 @@ button { cursor: pointer; }
 .kartice button:focus-visible { outline-offset: -3px; }
 .lista { border-top: var(--rule-hair) solid var(--color-rule); }
 .lista li { display: grid; grid-template-columns: 2.2rem minmax(0, 1fr) auto auto; gap: var(--space-sm); align-items: center; min-height: 44px; padding-inline: var(--space-2xs); border-bottom: var(--rule-hair) solid var(--color-rule-2); }
+.lista.datumi li { grid-template-columns: 4rem minmax(0, 1fr) auto auto; }
 .lista .mjesto { font-family: var(--font-mono); color: var(--color-muted); font-variant-numeric: tabular-nums; }
 .lista .ime { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
 .lista .bodovi { font-family: var(--font-mono); font-weight: 600; font-variant-numeric: tabular-nums; min-width: 4ch; text-align: end; }
